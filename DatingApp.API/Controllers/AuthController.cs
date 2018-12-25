@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using DatingApp.API.Data;
+using DatingApp.API.DTO;
+using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
+namespace DatingApp.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthRepository repo;
+        private readonly IConfiguration configuration;
+
+        public AuthController(IAuthRepository repo, IConfiguration configuration)
+        {
+            this.repo = repo;
+            this.configuration = configuration;
+        }
+        // GET api/values
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/values
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserResource user)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+            if (await repo.UserExists(user.Username.ToLower()))
+                return BadRequest("User exists");
+            var userToCreate = new User {
+                Username = user.Username
+            };
+            var createdUser = await repo.Register(userToCreate, user.Password);
+            return Ok(createdUser);
+        }
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] UserForLoginResource user)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+            var userFromRepo = await repo.Login(user.Username,user.Password);
+            if(userFromRepo == null)
+                return Unauthorized();
+            var claims = new[]{
+                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+                new Claim(ClaimTypes.Name, userFromRepo.Username)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = cred
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new {
+                token = tokenHandler.WriteToken(token)
+            });
+
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+    }
+}
