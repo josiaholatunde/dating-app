@@ -1,0 +1,13 @@
+<div class="container mt-5">
+  <div class="text-center" *ngIf="!isSignedUp">
+      <div>
+          <h1 class="text-primary">Find your match</h1>
+          <p class="lead">Come in to view your matches...All you need to do is sign up</p>
+        </div>
+      <div>
+        <button class="btn btn-success" (click)="isSignedUp=true">SignUp</button>
+        <button class="btn btn-default ml-3">Learn More</button>
+      </div>
+  </div>
+  <app-register *ngIf="isSignedUp" (showSignUpChange)="toggleSignUp($event)"></app-register>
+</div>
