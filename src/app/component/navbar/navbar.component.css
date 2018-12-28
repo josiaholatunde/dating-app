@@ -1,3 +1,7 @@
 form input.login,.loginbtn{
   box-shadow: none !important;
 }
+.nav-link,.dropdown-toggle,.dropdown-item{
+  cursor: pointer;
+}
+
