@@ -9,13 +9,13 @@ using DatingApp.API.Data;
 using DatingApp.API.DTO;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -36,10 +36,22 @@ namespace DatingApp.API.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpPost]
+        public ActionResult Post(IFormFile file)
         {
-            return "value";
+            try
+            {
+                if (file != null)
+                {
+                    Console.WriteLine(file.FileName);
+                }
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                
+                return StatusCode(500,ex.Message);
+            }
         }
 
         // PUT api/values/5
