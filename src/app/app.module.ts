@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { FileSelectDirective, FileDropDirective, FileUploader, FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
@@ -14,7 +15,7 @@ import { AuthService } from './service/auth.service';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { RegisterComponent } from './component/register/register.component';
 import { AlertifyService } from './service/alertify.service';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { AuthGuard } from './guard/auth.guard';
 import { MatchesComponent } from './component/matches/matches.component';
 import { MembersListComponent } from './component/members/members-list/members-list.component';
@@ -46,6 +47,7 @@ export function tokenGetter() {
     MemberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,8 @@ export function tokenGetter() {
     AppRoutingModule,
     NgxGalleryModule,
     FileUploadModule,
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

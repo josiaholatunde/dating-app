@@ -17,6 +17,7 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodedToken: any = {};
   currentUser: User;
+  private defaultPhotoUrl = '../../../../assets/img/user.png';
   private baseUrl = 'http://localhost:5000/api/auth';
   photoUrl = new BehaviorSubject<string>('../../assets/img/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
@@ -44,12 +45,16 @@ export class AuthService {
     );
   }
 
+  getDefaultPhotoUrl(): string {
+    return this.defaultPhotoUrl;
+  }
+
   loggedIn() {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  register(registerVm: any): Observable<any> {
+  register(registerVm: User): Observable<any> {
     return this.http.post(`${this.baseUrl}/register`, registerVm, httpOptions)
     .pipe();
   }

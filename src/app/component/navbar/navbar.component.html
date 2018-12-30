@@ -20,7 +20,7 @@
     </ul>
     <span class="dropdown" dropdown  *ngIf="loggedIn()">
       <span>
-        <img [src]="photoUrl"/>
+        <img [src]="photoUrl || '../../../../assets/img/user.png'"/>
       </span>
       <a class="dropdown-toggle" dropdownToggle>Welcome {{ displayLoggedInUserName() | titlecase }}</a>
       <ul class="dropdown-menu" *dropdownMenu>
