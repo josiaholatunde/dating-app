@@ -19,7 +19,10 @@
       </li>
     </ul>
     <span class="dropdown" dropdown  *ngIf="loggedIn()">
-      <a class="dropdown-toggle" dropdownToggle>Welcome {{ authService.decodedToken.unique_name | titlecase }}</a>
+      <span>
+        <img [src]="photoUrl"/>
+      </span>
+      <a class="dropdown-toggle" dropdownToggle>Welcome {{ displayLoggedInUserName() | titlecase }}</a>
       <ul class="dropdown-menu" *dropdownMenu>
           <a class="dropdown-item" [routerLink]="['/member/edit']">
             <i class="fa fa-user mr-2"></i>Edit Profile

@@ -40,17 +40,23 @@
     <div class="col-sm-8 mt-4">
         <tabset>
             <tab heading="About {{user.knownAs}}" >
-              <h4>Description</h4>
-              <p>{{user.introduction}}</p>
-              <h4>Looking For</h4>
-              <p>{{user.lookingFor}}</p>
+              <div class="container mt-3">
+                  <h4>Description</h4>
+                  <p>{{user.introduction}}</p>
+                  <h4>Looking For</h4>
+                  <p>{{user.lookingFor}}</p>
+              </div>
             </tab>
-            <tab heading="Interests" >
-                <h4>Interests</h4>
-                <p>{{user.interests}}</p>
+            <tab heading="Interests">
+                <div class="container mt-3">
+                  <h4>Interests</h4>
+                  <p>{{user.interests}}</p>
+                </div>
             </tab>
             <tab heading="Photos" >
-                <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                <div class="container mt-3">
+                  <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                </div>
             </tab>
             <tab heading="Messages" >
                 <p>Messages go here</p>
