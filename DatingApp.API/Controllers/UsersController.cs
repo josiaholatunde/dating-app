@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.DTO;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -39,7 +41,7 @@ namespace DatingApp.API.Controllers
            var userToReturn = mapper.Map<IEnumerable<User>, IEnumerable<UserForListDto>>(users);
             return Ok(userToReturn);
         }
-         [HttpGet("{id}")]
+         [HttpGet("{id}", Name="GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await repo.GetUser(id);

@@ -24,6 +24,7 @@ namespace DatingApp.API.Helpers
             //API Resources to Domain classes
             CreateMap<UserForUpdateDto, User>();
             CreateMap<PhotoForCreationDto,Photo>();
+            CreateMap<UserForRegisterDto, User>();
 
         }
     }

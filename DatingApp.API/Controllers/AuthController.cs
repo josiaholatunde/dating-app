@@ -46,17 +46,14 @@ namespace DatingApp.API.Controllers
 
         // POST api/values
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserResource user)
+        public async Task<IActionResult> RegisterUser([FromBody]UserForRegisterDto userForRegister)
         {
-            if(!ModelState.IsValid)
-                return BadRequest();
-            if (await repo.UserExists(user.Username.ToLower()))
+            if (await repo.UserExists(userForRegister.Username.ToLower()))
                 return BadRequest("User exists");
-            var userToCreate = new User {
-                Username = user.Username
-            };
-            var createdUser = await repo.Register(userToCreate, user.Password);
-            return Ok(createdUser);
+            var userToCreate = mapper.Map<UserForRegisterDto,User>(userForRegister);
+            var createdUser = await repo.Register(userToCreate, userForRegister.Password);
+            var userToReturn = mapper.Map<User, UserForDetailDto>(createdUser);
+            return CreatedAtRoute("GetUser", new { controller="User", id = createdUser.Id }, userToReturn);
         }
         [AllowAnonymous]
         [HttpPost("login")]
