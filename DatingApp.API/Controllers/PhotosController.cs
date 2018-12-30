@@ -93,6 +93,62 @@ namespace DatingApp.API.Controllers
 
             return BadRequest("Could not uploaded photo on save");
         }
+
+        [HttpDelete("{photoId}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int photoId)
+        {
+      
+            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var userFromRepo = await repo.GetUser(userId);
+            if(!userFromRepo.Photos.Any(p => p.Id == photoId))
+            {
+                return Unauthorized();
+            }
+            var photoFromRepo = await repo.GetPhoto(photoId);
+            if (photoFromRepo.IsMain)
+                return BadRequest("You can not delete your main Photo");
+            if(photoFromRepo.PublicId != null)
+            {
+                var deletionParams = new DeletionParams(photoFromRepo.PublicId);
+                var result = _cloudinary.Destroy(deletionParams);
+                if (result.Result == "ok")
+                    repo.Delete<Photo>(photoFromRepo);
+            }
+            if (photoFromRepo.PublicId == null)
+                repo.Delete<Photo>(photoFromRepo);
+
+            if(await repo.SaveAll())
+                return Ok();
+                
+            return BadRequest($"Failure in deleting photo with id {photoId}");
+
+        }
+        [HttpPost("{photoId}/SetMain")]
+        public async Task<IActionResult> SetUserMainPhoto(int userId, int photoId)
+        {
+      
+            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var user = await repo.GetUser(userId);
+            if(!user.Photos.Any(p => p.Id == photoId))
+                return Unauthorized();
+
+            var photoFromRepo = await repo.GetPhoto(photoId);
+            if(photoFromRepo.IsMain)
+                return BadRequest("Photo is already main photo");
+            var currentMainPhoto = user.Photos.FirstOrDefault(p => p.IsMain);
+            currentMainPhoto.IsMain = false;
+
+            photoFromRepo.IsMain = true;
+
+            if(await repo.SaveAll()) 
+            {
+                return NoContent();
+            }
+
+            return BadRequest("Unable to set main photo");
+        }
     }
 
 }
