@@ -29,9 +29,6 @@ namespace DatingApp.API.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                .HasKey(m => new { m.RecipientId, m.SenderId});
-
-            modelBuilder.Entity<Message>()
                 .HasOne(u => u.Sender)
                 .WithMany(u => u.MessagesSent)
                 .HasForeignKey(l => l.SenderId)
