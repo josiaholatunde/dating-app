@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DatingApp.API.Helpers
 {
@@ -12,6 +13,7 @@ namespace DatingApp.API.Helpers
         public int TotalCount { get; set; }
         public PagedList(List<T> items, int count, int pageSize, int pageNumber)
         {
+            TotalCount = count;
             PageSize = pageSize;
             TotalPages = (int) Math.Ceiling(count / (double)pageSize);
             CurrentPage = pageNumber;
@@ -19,9 +21,9 @@ namespace DatingApp.API.Helpers
         }
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> query, int pageSize, int pageNumber)
         {
-            var count = await query.CountAsync();
-            var items = query.Skip((pageNumber - 1) * pageNumber).Take(pageSize).ToList();
-            return await new PagedList<T>(items, count, pageSize, pageNumber);
+            var count = query.Count();
+            var items = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagedList<T>(items, count, pageSize, pageNumber);
         }
 
     }

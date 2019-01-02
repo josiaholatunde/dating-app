@@ -72,7 +72,7 @@ namespace DatingApp.API.Controllers
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(3),
                 SigningCredentials = cred
             };
             var tokenHandler = new JwtSecurityTokenHandler();
