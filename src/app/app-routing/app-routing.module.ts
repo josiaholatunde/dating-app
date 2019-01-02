@@ -13,11 +13,15 @@ import { MemberDetailResolver } from '../resolvers/member.detail.resolvers';
 import { MemberEditComponent } from '../component/members/member-edit/member-edit.component';
 import { MemberEditResolver } from '../resolvers/member.edit.resolver';
 import { PreventUnSavedChanges } from '../guard/prevent.unsaved.changes';
+import { MemberListResolver } from '../resolvers/member.list.resolver';
+import { ListComponent } from '../component/list/list.component';
+import { ListsResolver } from '../resolvers/lists.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: 'matches', component: MatchesComponent, canActivate: [ AuthGuard ] },
-  { path: 'members', component: MembersListComponent, canActivate: [ AuthGuard ] },
+  { path: 'lists', component: ListComponent, canActivate: [ AuthGuard ], resolve: { user: ListsResolver } },
+  { path: 'members', component: MembersListComponent, canActivate: [ AuthGuard ], resolve: { user: MemberListResolver } },
   { path: 'member/edit', component: MemberEditComponent, canActivate: [ AuthGuard ], canDeactivate: [PreventUnSavedChanges],
    resolve: { user: MemberEditResolver} },
   { path: 'members/:id', component: MemberDetailComponent, canActivate: [ AuthGuard ], resolve: { user: MemberDetailResolver} },

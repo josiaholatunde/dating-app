@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { FileSelectDirective, FileDropDirective, FileUploader, FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { PaginationModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
@@ -28,6 +30,7 @@ import { MemberDetailResolver } from './resolvers/member.detail.resolvers';
 import { MemberEditComponent } from './component/members/member-edit/member-edit.component';
 import { PreventUnSavedChanges } from './guard/prevent.unsaved.changes';
 import { PhotoEditorComponent } from './component/photo-editor/photo-editor.component';
+import { ListComponent } from './component/list/list.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -47,7 +50,8 @@ export function tokenGetter() {
     MemberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ListComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +61,9 @@ export function tokenGetter() {
     NgxGalleryModule,
     FileUploadModule,
     ReactiveFormsModule,
+    PaginationModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    ButtonsModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
