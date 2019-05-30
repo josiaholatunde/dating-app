@@ -1,4 +1,8 @@
-# DatingApp
+## DatingApp
+
+This project is a Dating Application built with ASP.NET CORE (Web API) and Angular 6 Client. The project allows users to register on the platform and uses JWT tokens in securing the API. Users can find matches based on different sort parameters such as Age, Sex, Location, etc. Users have the ability to Like other users and chat up other users. Unread messages can be viewed by users that are not currently logged in when the messages was sent and the messages are immediately marked as read once the user logs in. 
+The application implements pagination thereby reducing the load on the server when requests are made to fetch users etc.
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.0.
 
